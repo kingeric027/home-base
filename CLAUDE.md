@@ -21,7 +21,7 @@ Auth config is split across two files because Next.js middleware runs on the Edg
 
 **Database**: One DynamoDB table, raw AWS SDK v3 (`DynamoDBDocumentClient`) — no ORM/modeling library (ElectroDB/Dynamoose considered and explicitly rejected in favor of matching Vercel's own integration guide). Data access lives in hand-written per-entity modules under `lib/db/`.
 
-Credentials come from Vercel's OIDC Federation via `@vercel/oidc-aws-credentials-provider` (`lib/db/client.ts`) — no static AWS keys anywhere.
+Credentials come from Vercel's OIDC Federation via `@vercel/oidc-aws-credentials-provider` (`lib/db/client.ts`) — no static AWS keys anywhere. **Do not pass an explicit `audience` option** to `awsCredentialsProvider()` — Vercel's generic "Connect to AWS" docs show `audience: "sts.amazonaws.com"`, but that's for a DIY OIDC setup. The Marketplace DynamoDB integration provisions its own IAM role/trust policy for the default audience, and passing that override causes `InvalidIdentityTokenException` (confirmed by hand during Phase 0 setup — omitting `audience` entirely fixed it).
 
 Schema cheat-sheet (PK / SK):
 

@@ -9,7 +9,7 @@ export type RegisterState = { error?: string } | undefined;
 
 export async function registerAction(
   _prevState: RegisterState,
-  formData: FormData
+  formData: FormData,
 ): Promise<RegisterState> {
   const parsed = registerSchema.safeParse({
     email: formData.get("email"),
@@ -33,5 +33,5 @@ export async function registerAction(
   }
 
   await signIn("credentials", { email, password, redirect: false });
-  redirect("/dashboard");
+  redirect("/homes");
 }

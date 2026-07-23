@@ -1,0 +1,237 @@
+const API_KEY = process.env.REALIE_API_KEY!;
+
+export type RealEstateDetails = {
+  totalAssessedValue?: number;
+  assessedYear?: number;
+  taxValue?: number;
+  taxYear?: number;
+  acres?: number;
+  totalBathrooms?: number;
+  totalBedrooms?: number;
+  yearBuilt?: number;
+  salePriceLastTransfer?: number;
+  ownershipStartDate?: string;
+  livingArea?: number;
+};
+
+export async function getRealieDetails(state: string, addressLine1: string) {
+  const url = new URL("https://app.realie.ai/api/public/property/address");
+  url.searchParams.set("state", state);
+  url.searchParams.set("address", addressLine1);
+
+  const res = await fetch(url, {
+    headers: {
+      Authorization: API_KEY,
+    },
+  });
+  const data = await res.json();
+  if (!data.property) {
+    throw new Error("Failed to find real estate details");
+  }
+  return {
+    totalAssessedValue: data.property?.totalAssessedValue,
+    assessedYear: data.property?.assessedYear,
+    taxValue: data.property?.taxValue,
+    taxYear: data.property?.taxYear,
+    acres: data.property?.acres,
+    totalBathrooms: data.property?.totalBathrooms,
+    totalBedrooms: data.property?.totalBedrooms,
+    yearBuilt: data.property?.yearBuilt,
+    salePriceLastTransfer: data.property?.salePriceLastTransfer,
+    ownershipStartDate: data.property?.ownershipStartDate,
+    livingArea: data.property?.livingArea,
+  };
+}
+
+const mock = {
+  property: {
+    _id: "69e9b159ba7326290abfd3c9",
+    fipsState: "27",
+    fipsCounty: "123",
+    county: "RAMSEY",
+    parcelId: "35-30-23-22-0024",
+    addressRaw: "3484 HARRIET CT",
+    city: "SAINT PAUL",
+    zipCode: "55126",
+    state: "MN",
+    ownerName: "KING, ERIC M",
+    owner1FirstName: "ERIC M",
+    owner1LastName: "KING",
+    siteCensusTract: "271230407.041009",
+    siteCarrierRoute: "C006",
+    legalDesc:
+      "CITY/MUNI/TWP:SHOREVIEW SEC/TWN/RNG/MER:SEC 35 TWN 30 RNG 23 HILLS OF HOME LOT 10 BLK 3",
+    subdivision: "HILLS OF HOME",
+    totalAssessedValue: 358400,
+    assessedBuildingValue: 255500,
+    assessedLandValue: 102900,
+    assessedYear: 2026,
+    taxValue: 4212,
+    taxYear: 2026,
+    acres: 0.312,
+    lotSizeArea: 13591,
+    depthSize: 1360,
+    frontage: 920,
+    landArea: 13591,
+    basementType: "I",
+    buildingArea: 1446,
+    lengthOfResidenceCode: "03",
+    lengthOfResidenceMonths: 66,
+    wallType: "S",
+    fireplaceCount: 1,
+    garageCount: 2,
+    garageType: "U",
+    buildingCount: 0,
+    totalBathrooms: 2,
+    totalBedrooms: 4,
+    yearBuilt: 1964,
+    lenderName: "PLAZA HOME MORTGAGE INC",
+    mailerAddress: "3484 HARRIET CT",
+    mailingCity: "SHOREVIEW",
+    mailingState: "MN",
+    mailingZip5: "55126",
+    mailingZip4: "8013",
+    ownerAddressLine1: "3484 HARRIET CT",
+    ownerCity: "SAINT PAUL",
+    ownerState: "MN",
+    ownerZipCode: "55126",
+    ownerResCount: 0,
+    ownerComCount: 0,
+    ownerOriginCode: "3",
+    buyerIDCode: "ID",
+    purchaseRecordingDate: "20200715",
+    purchaseSaleDate: "20200619",
+    recordingDate: "20200715",
+    transferDate: "20200619",
+    transferPrice: 302500,
+    assessorSaleDocumentNumber: "1107629",
+    assessorSalePrice: 302500,
+    assessorSalePriceCode: "A",
+    assessorSaleRecordingDate: "20200619",
+    secTwnRng: "SEC 35 TWN 30 RNG 23",
+    blockNum: "3",
+    lotNum: "10",
+    jurisdiction: "SHOREVIEW",
+    totalBuildingValue: 255500,
+    totalLandValue: 102900,
+    totalMarketValue: 358400,
+    marketValueYear: 2025,
+    useCode: "1001",
+    distressedSale: 0,
+    realEstateOwnedPurchaseSale: 0,
+    totalLienCount: 1,
+    totalLienBalance: 186897,
+    totalFinancingHistCount: 2,
+    LTVCurrentEstCombined: 48.2977,
+    LTVCurrentEstRange: 1,
+    equityCurrentEstBal: 200072,
+    equityCurrentEstRange: 5,
+    LTVPurchase: 86.7769,
+    distressedDeedTransfer: 0,
+    realEstateOwnedDeedTransfer: 0,
+    siteId: "506230829",
+    ownerParcelCount: 1,
+    latitude: 45.046774,
+    longitude: -93.143031,
+    pastRecordingDateSale: "20190814",
+    pastDocumentNumberTransfer: "A04768889",
+    pastDocumentTypeTransfer: "QC",
+    pastPriceTransfer: 0,
+    pastPriceCodeTransfer: "Z",
+    pastSaleDateTransfer: "20190726",
+    pastDistressedTransfer: 0,
+    pastRealEstateOwnedTransfer: 0,
+    saleDocumentNumberLastSale: "A04822201",
+    saleDocumentTypeLastSale: "WD",
+    salePriceCodeLastSale: "R",
+    salePriceLastTransfer: 302500,
+    salePriceCodeLastTransfer: "R",
+    ownershipStartDate: "20200619",
+    transferDocNum: "A04822201",
+    transferDocType: "WD",
+    state_parcelId: "MN-RAMSEY-35-30-23-22-0024",
+    state_parcelIdSTD: "MN-RAMSEY-353023220024",
+    location: {
+      type: "Point",
+      coordinates: [-93.143031, 45.046774],
+    },
+    livingArea: 1446,
+    ownerZipCodePlusFour: "551268013",
+    ownerAddressFull: "3484 HARRIET CT, SAINT PAUL, MN 55126",
+    fireplace: true,
+    garage: true,
+    residential: true,
+    condo: false,
+    transferDateObject: "2020-06-19T00:00:00.000Z",
+    grantee: "KING, ERIC M",
+    transfers: [
+      {
+        transferDate: "20200619",
+        transferDateObject: "2020-06-19T00:00:00.000Z",
+        transferPrice: 302500,
+        recordingDate: "20200715",
+        transferDocNum: "A04822201",
+        transferDocType: "WD",
+        grantee: "KING, ERIC M",
+      },
+      {
+        transferDate: "20190726",
+        transferDateObject: "2019-07-26T00:00:00.000Z",
+        transferPrice: 0,
+        recordingDate: "20190814",
+        transferDocNum: "A04768889",
+        transferDocType: "QC",
+      },
+    ],
+    assessments: [
+      {
+        assessedYear: 2026,
+        totalAssessedValue: 358400,
+        totalBuildingValue: 255500,
+        totalLandValue: 102900,
+        totalMarketValue: 358400,
+        marketValueYear: 2025,
+        taxValue: 4212,
+        taxYear: 2026,
+      },
+    ],
+    section: "35",
+    township: "30",
+    range: "23",
+    address: "3484 HARRIET CT",
+    addressLine1: "3484 HARRIET CT",
+    addressFormal: "3484 HARRIET COURT",
+    addressFull: "3484 HARRIET CT, SAINT PAUL, MN 55126",
+    addressFullUSPS: "3484 HARRIET CT, SAINT PAUL, MN 55126",
+    streetNumber: "3484",
+    street: "HARRIET CT",
+    streetName: "HARRIET",
+    streetType: "CT",
+    cityUSPS: "SAINT PAUL",
+    countyUSPS: "RAMSEY",
+    geometry: {
+      type: "MultiPolygon",
+      coordinates: [
+        [
+          [
+            [-93.1427686, 45.0466594],
+            [-93.1427684, 45.0466374],
+            [-93.1432907, 45.0466352],
+            [-93.1432928, 45.0468878],
+            [-93.1431883, 45.0469072],
+            [-93.143082, 45.0469213],
+            [-93.1429747, 45.04693],
+            [-93.1428667, 45.0469332],
+            [-93.1427709, 45.0469336],
+            [-93.1427686, 45.0466594],
+          ],
+        ],
+      ],
+    },
+    pool: false,
+    modelValue: 390819.625,
+    modelValueMax: 450106.9375,
+    modelValueMin: 360101.21875,
+    avmCalibrationVersion: "v1.2026-05-19",
+  },
+};
